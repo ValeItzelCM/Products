@@ -19,6 +19,25 @@ function AgregarProducto($nombre, $codigo, $marca, $modelo, $usuarioID){
     global $conexion;
     $cnx = $conexion->conectar();
 
+    // - - - - - - - - - - -
+    $query = "SELECT * FROM Productos WHERE Codigo = ? AND UsuarioID = ?";
+    $stmt = $cnx->prepare($query);
+
+    $stmt->bind_param("si", $codigo, $usuarioID); 
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    // Verificar si se encontro un código suplicado - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    if ($result->num_rows == 1){
+        setcookie('ResultAddProduct', 'danger', time() + 3600, "/");
+        header("Location: $conexion->url/Views/Home.php");
+
+        $stmt->close();
+        $cnx->close();
+        return;
+    }
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
     // Consulta para insertar el producto en la base de datos
     $query = "INSERT INTO Productos (Nombre, Codigo, Marca, Modelo, UsuarioID) VALUES (?, ?, ?, ?, ?)";
     $stmt = $cnx->prepare($query);
@@ -28,7 +47,8 @@ function AgregarProducto($nombre, $codigo, $marca, $modelo, $usuarioID){
 
     // Ejecutar la consulta
     if ($stmt->execute()) {
-       header("Location: $conexion->url/Views/Home.php");
+        setcookie('ResultAddProduct', 'success', time() + 3600, "/");
+        header("Location: $conexion->url/Views/Home.php");
     } else {
         echo "Error al agregar el producto: " . $stmt->error;
     }

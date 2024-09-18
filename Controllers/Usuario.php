@@ -52,6 +52,7 @@ function AutenticarUsuario($usuario, $clave)
         session_start(); //INICIO LA SESIÓN 
         $_SESSION['usuario_id'] = $row['ID'];
         $_SESSION['usuario'] = $row['UserName']; 
+        $_SESSION['Bienvenida'] = 1; 
 
         header("Location: $conexion->url/Views/Home.php");
     } else {

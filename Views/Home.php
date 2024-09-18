@@ -5,7 +5,14 @@ include("../Scripts/Alertas.php");
 
 include("../Scripts/OperacionesProductos.php");
 
-Bienvenida();
+if($_SESSION['Bienvenida'] == 1){
+    Bienvenida();
+    $_SESSION['Bienvenida'] = 0;
+}
+
+if(isset($_COOKIE['ResultAddProduct'])){
+    ResultadoAgregarProducto();
+}
 ?>
 
 <div class="container">

@@ -10,6 +10,25 @@ function Bienvenida()
         ';
 }
 
+function ResultadoAgregarProducto()
+{
+    $leyenda;
+    if($_COOKIE['ResultAddProduct'] == "success"){
+        $leyenda = "¡Producto agregado correctamente!";
+    }else{
+        $leyenda = "¡El código de producto ingresado pertenece a otro producto!";
+    }
+
+    echo '
+            <div class="alert alert-'.$_COOKIE['ResultAddProduct'].' alert-dismissible" role="alert">
+                <div>'.$leyenda.'</div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        ';
+
+    setcookie('ResultAddProduct', '', time() - 3600, "/");
+}
+
 function ErrorCredenciales()
 {
     if(isset($_COOKIE['UserError'])){
